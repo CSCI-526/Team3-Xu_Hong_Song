@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8920569a64b94fc4f9d67229d6f2946a, type: 3}
   m_Name: OffenseDataAsset
   m_EditorClassIdentifier: Assembly-CSharp::OffenseData
-  gold: 0
+  gold: 20
   baseCostHealth: 10
   baseCostDamage: 15
   baseCostSpawnCount: 50

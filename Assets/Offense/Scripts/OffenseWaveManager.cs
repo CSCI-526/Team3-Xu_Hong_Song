@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ReverseTD.Defense;
+using UnityEngine.UI;
 
 namespace ReverseTD.Offense
 {
@@ -29,6 +30,8 @@ namespace ReverseTD.Offense
         [SerializeField, Range(0.1f, 5f), Tooltip("Game speed.")]
         private float timeScale = 1f;
 
+        [SerializeField] private Slider speedSlider;
+
         private int livingUnits = 0;
         private bool spawningComplete = false;
         private int spawnedCount = 0;
@@ -41,12 +44,42 @@ namespace ReverseTD.Offense
 
         private void Start()
         {
+            if (offenseData != null)
+            {
+                timeScale = offenseData.gameSpeed;
+
+                if (speedSlider != null)
+                {
+                    if (timeScale == 1f)
+                        speedSlider.SetValueWithoutNotify(0);
+                    else if (timeScale == 2f)
+                        speedSlider.SetValueWithoutNotify(1);
+                    else
+                        speedSlider.SetValueWithoutNotify(2);
+                }
+            }
+
             SpawnWave();
         }
 
         private void Update()
         {
             Time.timeScale = timeScale;
+        }
+
+        public void SetSpeedFromSlider(float value)
+        {
+            int index = Mathf.RoundToInt(value);
+
+            if (index == 0)
+                timeScale = 1f;
+            else if (index == 1)
+                timeScale = 2f;
+            else
+                timeScale = 4f;
+
+            if (offenseData != null)
+                offenseData.gameSpeed = timeScale;
         }
 
         private void OnDisable()

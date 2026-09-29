@@ -4,7 +4,8 @@ using UnityEngine;
 public class OffenseData : ScriptableObject
 {
     // Currency
-    public double gold = 0;
+    public double gold = 20;
+    public float gameSpeed = 1f;
 
     // Base costs
     public double baseCostHealth = 10;
@@ -59,5 +60,14 @@ public class OffenseData : ScriptableObject
             return true;
         }
         return false;
+    }
+
+    public void ResetGame()
+    {
+        gold = 20;
+        healthLevel = 0;
+        damageLevel = 0;
+        spawnCountLevel = 0;
+        gameSpeed = 1f;
     }
 }

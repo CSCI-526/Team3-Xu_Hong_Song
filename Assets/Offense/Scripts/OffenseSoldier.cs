@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ReverseTD.Shared;
 using ReverseTD.Defense;
+using UnityEngine.SceneManagement;
 
 namespace ReverseTD.Offense
 {
@@ -77,7 +78,7 @@ namespace ReverseTD.Offense
             // Reached the end of the track
             if (distanceTraveled >= path.TotalLength)
             {
-                Despawn();
+                SceneManager.LoadScene("EndGame");
                 return;
             }
 
