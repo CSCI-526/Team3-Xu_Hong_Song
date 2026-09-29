@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace ReverseTD.Defense
 {
-    /// <summary>A place on the board where a tower stands.</summary>
     [Serializable]
     public struct TowerSlot
     {

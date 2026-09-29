@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace ReverseTD.Defense
 {
-    /// <summary>
-    /// One stage: the path soldiers walk and where the towers stand.
-    /// The single source of truth for the board; <see cref="BoardView"/> builds from it.
-    /// </summary>
     [CreateAssetMenu(menuName = "ReverseTD/Stage Layout", fileName = "StageLayout")]
     public class StageLayout : ScriptableObject
     {
@@ -27,7 +23,6 @@ namespace ReverseTD.Defense
         public float PathWidth => pathWidth;
         public Color PathColor => pathColor;
 
-        /// <summary>The world-space area covered by the path and the towers.</summary>
         public Bounds CalculateBounds()
         {
             var bounds = new Bounds();

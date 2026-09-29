@@ -1,14 +1,8 @@
-// TEST ONLY: spawns dummy soldiers for testing towers until teammates' soldiers exist.
-
 using System.Collections;
 using UnityEngine;
 
 namespace ReverseTD.Defense.Testing
 {
-    /// <summary>
-    /// Sends a wave of <see cref="DummySoldier"/>s down the board's path when Play starts.
-    /// To send another, right-click the component header and choose "Spawn Wave".
-    /// </summary>
     public class DummyWaveSpawner : MonoBehaviour
     {
         [SerializeField, Tooltip("The board whose path the dummies walk.")]
@@ -81,7 +75,6 @@ namespace ReverseTD.Defense.Testing
 
         private void SpawnDummy()
         {
-            // Spawn inactive, so the dummy registers as a target (in OnEnable) only after Initialize.
             var dummyObject = new GameObject($"Dummy {spawnedCount++}");
             dummyObject.SetActive(false);
             dummyObject.transform.SetParent(transform, false);

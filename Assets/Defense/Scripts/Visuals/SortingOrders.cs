@@ -1,9 +1,5 @@
 namespace ReverseTD.Defense
 {
-    /// <summary>
-    /// SpriteRenderer.sortingOrder values, drawn lowest first. Everything stays on the Default
-    /// sorting layer, so no custom sorting layers are needed.
-    /// </summary>
     public static class SortingOrders
     {
         public const int Path = 0;

@@ -2,9 +2,6 @@ using UnityEngine;
 
 namespace ReverseTD.Defense
 {
-    /// <summary>
-    /// Stats and look of one tower type. All values are placeholders until the team settles them.
-    /// </summary>
     [CreateAssetMenu(menuName = "ReverseTD/Tower Definition", fileName = "TowerDefinition")]
     public class TowerDefinition : ScriptableObject
     {

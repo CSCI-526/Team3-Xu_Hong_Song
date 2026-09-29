@@ -2,23 +2,17 @@ using UnityEngine;
 
 namespace ReverseTD.Defense
 {
-    /// <summary>
-    /// White sprites made in code, one world unit across with a centered pivot.
-    /// Tint them with <see cref="SpriteRenderer.color"/> and size them with the transform's scale.
-    /// Use only at runtime: sprites made in Edit mode would be saved into scenes as missing references.
-    /// </summary>
     public static class ShapeSprites
     {
         private const int SquareSize = 4;
         private const int CircleSize = 64;
         private const int RingSize = 256;
-        private const float RingThickness = 4f; // in texture pixels
+        private const float RingThickness = 4f;
 
         private static Sprite square;
         private static Sprite circle;
         private static Sprite ring;
 
-        // Domain reload is disabled, so statics survive between Play sessions unless cleared here.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics()
         {
@@ -68,7 +62,6 @@ namespace ReverseTD.Defense
             return 1f;
         }
 
-        // The +0.5 terms fade each edge over one pixel, for anti-aliasing.
         private static float CircleAlpha(float distance, float radius)
         {
             return radius - distance + 0.5f;
@@ -79,7 +72,6 @@ namespace ReverseTD.Defense
             return Mathf.Min(radius - distance + 0.5f, distance - (radius - RingThickness) + 0.5f);
         }
 
-        // alphaAt(distance from center, radius) gives each pixel's opacity; both are in pixels.
         private static Sprite CreateSprite(string spriteName, int size, System.Func<float, float, float> alphaAt)
         {
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
