@@ -2,13 +2,9 @@ using UnityEngine;
 
 namespace ReverseTD.Defense
 {
-    /// <summary>
-    /// A tower on the board, built from a <see cref="TowerDefinition"/>.
-    /// <see cref="BoardView"/> spawns it inactive, calls <see cref="Initialize"/>, then activates it.
-    /// </summary>
     public class Tower : MonoBehaviour
     {
-        private const float HealthBarGap = 0.2f; // between the body's top edge and the HP bar
+        private const float HealthBarGap = 0.2f;
         private const float HealthBarExtraWidth = 0.2f;
 
         [SerializeField, Tooltip("Stats and look. Set by BoardView when the tower spawns.")]
@@ -16,26 +12,16 @@ namespace ReverseTD.Defense
 
         private BoardView board;
 
-        /// <summary>
-        /// Raised when a tower's HP reaches 0, just before it's removed. Hook rewards in here.
-        /// The tower's name, position, and definition are still valid during the call.
-        /// </summary>
         public static event System.Action<Tower> Destroyed;
 
         public TowerDefinition Definition => definition;
 
-        // Domain reload is disabled, so statics (event subscribers included) survive between Play sessions unless cleared here.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics()
         {
             Destroyed = null;
         }
 
-        /// <summary>
-        /// Sets the tower's definition and adds its parts: body, range ring, HP bar, health, targeting, and weapon.
-        /// Call once, right after spawning. Stats are read from the definition while playing, so edits
-        /// to it show up right away; the body's size and color are applied only here.
-        /// </summary>
         public void Initialize(TowerDefinition towerDefinition, BoardView owner)
         {
             definition = towerDefinition;
@@ -55,11 +41,8 @@ namespace ReverseTD.Defense
             gameObject.AddComponent<TowerWeapon>().Initialize(definition, targeting);
         }
 
-        // Called by TowerHealth at 0 HP.
         internal void Die()
         {
-            // Destroy takes effect at the end of the frame, so handlers still see a valid tower.
-            // Scheduling it first means a handler that throws can't leave a dead tower on screen.
             Destroy(gameObject);
             try
             {
@@ -67,7 +50,6 @@ namespace ReverseTD.Defense
             }
             finally
             {
-                // After every Destroyed handler, so AllTowersDestroyed always comes last.
                 if (board != null)
                 {
                     board.HandleTowerDestroyed(this);
@@ -77,7 +59,6 @@ namespace ReverseTD.Defense
 
         private void CreateBody()
         {
-            // The body is a child, so its scale doesn't affect the other children, like the range ring.
             GameObject body = CreateChild("Body");
             body.transform.localScale = new Vector3(definition.Size, definition.Size, 1f);
 

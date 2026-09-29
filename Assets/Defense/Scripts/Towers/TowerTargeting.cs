@@ -4,21 +4,16 @@ using UnityEngine;
 
 namespace ReverseTD.Defense
 {
-    /// <summary>
-    /// Picks the soldier a tower shoots, using the tower's range and <see cref="TargetingMode"/>.
-    /// </summary>
     public class TowerTargeting : MonoBehaviour
     {
         private readonly List<IDamageable> candidates = new List<IDamageable>();
         private TowerDefinition definition;
 
-        /// <summary>Call once, right after adding the component.</summary>
         public void Initialize(TowerDefinition towerDefinition)
         {
             definition = towerDefinition;
         }
 
-        /// <summary>The live soldier in range to shoot, or null if there's none.</summary>
         public IDamageable FindTarget()
         {
             CombatRegistry.GetAlive(Team.Attacker, candidates);
@@ -52,7 +47,6 @@ namespace ReverseTD.Defense
                 }
             }
 
-            // First falls back to nearest when no soldier in range reports path progress.
             if (definition.TargetingMode == TargetingMode.First && first != null)
             {
                 return first;

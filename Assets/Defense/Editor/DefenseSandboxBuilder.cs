@@ -8,10 +8,6 @@ using Object = UnityEngine.Object;
 
 namespace ReverseTD.Defense.EditorTools
 {
-    /// <summary>
-    /// Tools > RK > Build Defense Sandbox: creates the default assets if they're missing,
-    /// then regenerates the sandbox scene and opens it. Safe to run repeatedly.
-    /// </summary>
     public static class DefenseSandboxBuilder
     {
         private const string DataFolder = "Assets/Defense/Data";
@@ -22,7 +18,6 @@ namespace ReverseTD.Defense.EditorTools
 
         private static readonly Color backgroundColor = new Color(0.12f, 0.14f, 0.17f);
 
-        // A zigzag with 90-degree turns across a roughly 16x9 board.
         private static readonly Vector2[] defaultWaypoints =
         {
             new Vector2(-8f, 3f),
@@ -33,7 +28,6 @@ namespace ReverseTD.Defense.EditorTools
             new Vector2(8f, -3f),
         };
 
-        // Inside the zigzag's bends, 1.5 units from the path rows on either side.
         private static readonly Vector2[] defaultTowerPositions =
         {
             new Vector2(-1.5f, 1.5f),
@@ -97,7 +91,6 @@ namespace ReverseTD.Defense.EditorTools
                 return null;
             }
 
-            // New assets start with the field defaults declared in TowerDefinition.
             tower = ScriptableObject.CreateInstance<TowerDefinition>();
             AssetDatabase.CreateAsset(tower, TowerAssetPath);
             return tower;
@@ -135,14 +128,11 @@ namespace ReverseTD.Defense.EditorTools
                 FindField(slot, "definition").objectReferenceValue = tower;
             }
 
-            // CreateAsset writes the filled asset to disk. No SaveAssets: it would also save
-            // unrelated unsaved changes, such as project settings.
             serialized.ApplyModifiedPropertiesWithoutUndo();
             AssetDatabase.CreateAsset(stage, StageAssetPath);
             return stage;
         }
 
-        // CreateAsset would silently replace whatever is at the path, so refuse if it's something else.
         private static bool IsPathFree<T>(string assetPath)
         {
             if (!AssetDatabase.AssetPathExists(assetPath))
@@ -158,8 +148,6 @@ namespace ReverseTD.Defense.EditorTools
         {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // NewScene unloads assets that nothing references, which can include a stage created
-            // moments ago; a reference to the unloaded object would be saved as empty. Load it again.
             var stage = AssetDatabase.LoadAssetAtPath<StageLayout>(StageAssetPath);
             if (stage == null)
             {
@@ -217,14 +205,12 @@ namespace ReverseTD.Defense.EditorTools
             property.objectReferenceValue = value;
             serialized.ApplyModifiedPropertiesWithoutUndo();
 
-            // Fail at build time, not with an empty field at Play.
             if (property.objectReferenceValue == null)
             {
                 throw new InvalidOperationException($"Couldn't set {target.GetType().Name}.{fieldName}.");
             }
         }
 
-        // Fields are found by name, so a renamed field fails here loudly instead of leaving it unset.
         private static SerializedProperty FindField(SerializedObject owner, string fieldName)
         {
             SerializedProperty property = owner.FindProperty(fieldName);

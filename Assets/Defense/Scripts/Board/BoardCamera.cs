@@ -2,9 +2,6 @@ using UnityEngine;
 
 namespace ReverseTD.Defense
 {
-    /// <summary>
-    /// Keeps the whole board in view of an orthographic camera, at any screen aspect ratio.
-    /// </summary>
     [RequireComponent(typeof(Camera))]
     public class BoardCamera : MonoBehaviour
     {
@@ -27,7 +24,6 @@ namespace ReverseTD.Defense
             Fit();
         }
 
-        // The Game view or the device can change aspect ratio while running.
         private void LateUpdate()
         {
             if (!Mathf.Approximately(cachedCamera.aspect, fittedAspect))

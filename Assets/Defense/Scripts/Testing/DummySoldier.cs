@@ -1,18 +1,13 @@
-// TEST ONLY: a stand-in soldier for testing towers until teammates' soldiers exist.
-
 using System.Collections.Generic;
 using ReverseTD.Shared;
 using UnityEngine;
 
 namespace ReverseTD.Defense.Testing
 {
-    /// <summary>
-    /// A circle that walks the stage path, can be shot, and hits towers it passes. It darkens as it loses HP.
-    /// </summary>
     public class DummySoldier : MonoBehaviour, IDamageable, IPathProgress
     {
         private const float Size = 0.4f;
-        private const float AttackInterval = 1f; // seconds between attacks
+        private const float AttackInterval = 1f;
 
         private static readonly Color fullHealthColor = new Color(0.95f, 0.35f, 0.3f);
         private static readonly Color lowHealthColor = new Color(0.35f, 0.08f, 0.08f);
@@ -44,7 +39,6 @@ namespace ReverseTD.Defense.Testing
         public Vector3 Position => transform.position;
         public float DistanceTraveled => distanceTraveled;
 
-        /// <summary>Call once while the object is inactive, then activate it.</summary>
         public void Initialize(StagePath stagePath, float hitPoints, float walkSpeed, float attackDamage, float towerAttackRange)
         {
             path = stagePath;
@@ -84,7 +78,6 @@ namespace ReverseTD.Defense.Testing
             distanceTraveled += speed * Time.deltaTime;
             transform.position = path.GetPointAtDistance(distanceTraveled);
 
-            // Broke through. What that means is up to the real game; the dummy just leaves.
             if (distanceTraveled >= path.TotalLength)
             {
                 Despawn();
@@ -109,7 +102,6 @@ namespace ReverseTD.Defense.Testing
             }
         }
 
-        // Hits the nearest tower in range once per AttackInterval, without stopping.
         private void Attack()
         {
             attackCooldown -= Time.deltaTime;
@@ -121,7 +113,6 @@ namespace ReverseTD.Defense.Testing
             IDamageable target = FindNearestTower();
             if (target == null)
             {
-                // Stay ready, so the dummy hits a tower the moment one comes into range.
                 attackCooldown = 0f;
                 return;
             }
@@ -149,7 +140,6 @@ namespace ReverseTD.Defense.Testing
             return nearest;
         }
 
-        // Marked dead right away, so nothing targets it before Destroy runs at the end of the frame.
         private void Despawn()
         {
             isAlive = false;

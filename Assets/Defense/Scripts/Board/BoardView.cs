@@ -4,10 +4,6 @@ using UnityEngine;
 
 namespace ReverseTD.Defense
 {
-    /// <summary>
-    /// Builds the board from a <see cref="StageLayout"/> when Play starts: path segments, then towers.
-    /// In the editor it also draws the layout as gizmos, so it's visible without pressing Play.
-    /// </summary>
     public class BoardView : MonoBehaviour
     {
         private const int RangeCircleSegments = 48;
@@ -18,17 +14,10 @@ namespace ReverseTD.Defense
         private readonly List<Tower> towers = new List<Tower>();
         private StagePath path;
 
-        /// <summary>
-        /// Raised when a board's last tower is destroyed, after all of that tower's
-        /// <see cref="Tower.Destroyed"/> handlers have run.
-        /// </summary>
         public static event Action<BoardView> AllTowersDestroyed;
 
         public StageLayout Layout => layout;
 
-        /// <summary>
-        /// The path soldiers walk. Created on first access, so it's safe to use from any Awake or Start.
-        /// </summary>
         public StagePath Path
         {
             get
@@ -45,20 +34,14 @@ namespace ReverseTD.Defense
             }
         }
 
-        /// <summary>
-        /// The towers still standing. A tower leaves this list right after its <see cref="Tower.Destroyed"/>
-        /// event, so iterate over a copy if the loop can destroy towers.
-        /// </summary>
         public IReadOnlyList<Tower> Towers => towers;
 
-        // Domain reload is disabled, so statics (event subscribers included) survive between Play sessions unless cleared here.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics()
         {
             AllTowersDestroyed = null;
         }
 
-        // Called by a dying tower, after its Destroyed event.
         internal void HandleTowerDestroyed(Tower tower)
         {
             if (towers.Remove(tower) && towers.Count == 0)
@@ -94,8 +77,6 @@ namespace ReverseTD.Defense
                     continue;
                 }
 
-                // A square stretched over the segment. Making it one path width longer
-                // overlaps the neighboring segments, which fills the corners.
                 var segment = new GameObject($"Segment {i - 1}");
                 segment.transform.SetParent(root, false);
                 segment.transform.SetPositionAndRotation(
@@ -123,7 +104,6 @@ namespace ReverseTD.Defense
                     continue;
                 }
 
-                // Spawn inactive, so the tower's OnEnable runs after Initialize instead of before it.
                 var towerObject = new GameObject($"Tower {i}");
                 towerObject.SetActive(false);
                 towerObject.transform.SetParent(root, false);
@@ -143,7 +123,6 @@ namespace ReverseTD.Defense
             return child;
         }
 
-        // Reads the layout directly (not the cached Path), so edits to the asset show up right away.
         private void OnDrawGizmos()
         {
             if (layout == null)
@@ -172,7 +151,6 @@ namespace ReverseTD.Defense
                 TowerDefinition definition = slots[i].Definition;
                 if (definition == null)
                 {
-                    // Magenta flags a slot with no tower assigned.
                     Gizmos.color = Color.magenta;
                     Gizmos.DrawWireCube(slots[i].Position, new Vector3(1f, 1f, 0f));
                     continue;
